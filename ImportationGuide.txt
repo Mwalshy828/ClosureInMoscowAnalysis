@@ -1,0 +1,43 @@
+Importation and Formatting
+TPAPSongs=Import["https://raw.githubusercontent.com/Mwalshy828/ClosureInMoscowAnalysis/master/ThePenanceAndThePatience.txt"];
+%522
+%522
+FTSongs=Import["https://raw.githubusercontent.com/Mwalshy828/ClosureInMoscowAnalysis/master/FirstTemple2.txt"];
+%524
+%524
+PLSongs=Import["https://raw.githubusercontent.com/Mwalshy828/ClosureInMoscowAnalysis/master/PinkLemonade.txt"];
+%526
+%526
+TPAPSongsDel=StringTrim[DeleteStopwords[StringSplit[TPAPSongs, RegularExpression["Song \\d"]]]][[2;;]];
+FTSongsDel=StringTrim[DeleteStopwords[StringSplit[FTSongs, RegularExpression["Song \\d"]]]][[2;;]];
+PLSongsDel=StringTrim[DeleteStopwords[StringSplit[PLSongs, RegularExpression["Song \\d"]]]][[2;;]];
+tokensTPAP=ToLowerCase[TextWords[TPAPSongsDel]];
+tokensFT=ToLowerCase[TextWords[FTSongsDel]];
+tokensPL=ToLowerCase[TextWords[PLSongsDel]];
+tokenCleanedTPAP=Map[Select[#,StringLength[#]>1&]&,tokensTPAP];
+tokenCleanedFT=Map[Select[#,StringLength[#]>1&]&,tokensFT];
+tokenCleanedPL=Map[Select[#,StringLength[#]>1&]&,tokensPL];
+tokenStemmedTPAP=WordStem[tokenCleanedTPAP];
+tokenStemmedFT=WordStem[tokenCleanedFT];
+tokenStemmedPL=WordStem[tokenCleanedPL];
+vocabularyTPAP=DeleteDuplicates[Flatten[tokenStemmedTPAP]];
+vocabularyFT=DeleteDuplicates[Flatten[tokenCleanedFT]];
+vocabularyPL=DeleteDuplicates[Flatten[tokenCleanedPL]];
+vocabAsscTPAP=AssociationThread[vocabularyTPAP->Range[Length[vocabularyTPAP]]];
+vocabAsscFT=AssociationThread[vocabularyFT->Range[Length[vocabularyFT]]];
+vocabAsscPL=AssociationThread[vocabularyPL->Range[Length[vocabularyPL]]];
+corpusTallyTPAP=Map[Tally[#]&,tokenStemmedTPAP];
+corpusTallyFT=Map[Tally[#]&,tokenStemmedFT];
+corpusTallyPL=Map[Tally[#]&,tokenStemmedPL];
+Length[corpusTallyTPAP];
+Length[corpusTallyFT];
+Length[corpusTallyPL];
+TPAPLyrics=SortBy[Flatten[corpusTallyTPAP,1],Last];
+FTLyrics=SortBy[Flatten[corpusTallyFT,1],Last];
+PLLyrics=SortBy[Flatten[corpusTallyPL, 1], Last];
+Length[SortBy[Flatten[corpusTallyTPAP,1],Last]];
+Length[SortBy[Flatten[corpusTallyFT,1],Last]];
+Length[SortBy[Flatten[corpusTallyPL,1],Last]];
+last40TPAP=SortBy[Flatten[corpusTallyTPAP,1],Last][[212-40;;212]];
+last40FT=SortBy[Flatten[corpusTallyFT,1],Last][[552-40;;552]];
+last40PL=SortBy[Flatten[corpusTallyPL,1],Last][[966-40;;966]];
